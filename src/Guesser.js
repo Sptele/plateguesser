@@ -10,18 +10,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 
 		if (choice === plateData.status) { setScore(score + 1); }
 		else {
-			console.log(gameMode)
-			switch (gameMode) {
-				case "survivor":
-					// You lose screen
-					break;
-				case "arcade":
-					setScore(0);
-					break;
-				default:
-					setScore(-1);
-					break;
-			}
+			setScore(0);
 		}
 
 	};
