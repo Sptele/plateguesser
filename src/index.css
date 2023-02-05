@@ -31,6 +31,17 @@
 	html {
 		font-family: 'Josefin Sans', sans-serif;
 	}
+
+	li {
+		@apply list-disc;
+		@apply list-inside;
+	}
+
+	a:hover, .text-button:hover, .clicked {
+		@apply text-blue-500;
+		@apply hover:text-blue-700;
+		@apply underline;
+	}
 }
 
 @layer utilities {

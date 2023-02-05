@@ -1,85 +1,118 @@
 import data from "./data/applications.json";
 import { useState } from "react";
 
-function Guesser({ config }) {
+function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 	const [plateData, setPlateData] = useState(getRandomPlateData());
 	const [isCorrect, setIsCorrect] = useState(null);
 
 	const makeChoice = (choice) => {
 		setIsCorrect(choice === plateData.status);
+
+		if (choice === plateData.status) { setScore(score + 1); }
+		else {
+			console.log(gameMode)
+			switch (gameMode) {
+				case "survivor":
+					// You lose screen
+					break;
+				case "arcade":
+					setScore(0);
+					break;
+				default:
+					setScore(-1);
+					break;
+			}
+		}
+
 	};
 
 	return (
-		<div className="text-center rounded-lg border-2 border-gray-400 border-solid m-8 max-w-md mx-auto mt-10 p-4">
-			{isCorrect !== null && (
-				<>
-					<h1 className="mb-2">
-						{isCorrect ? "Correct!" : "Wrong!"}
-					</h1>
-
-					<p className="text-gray-600">
-						The DMV decided to{" "}
-						{plateData.status === "Y" ? "accept" : "deny"}
-					</p>
-				</>
-			)}
-			<h1>{parsePlate(plateData.plate)}</h1>
-			{isCorrect !== null && plateData.status === "N" &&
-				getReason(plateData.review_reason_code) !== null && (
-					<p className="text-gray-600">
-						because {getReason(plateData.review_reason_code)}
-					</p>
-				)}
-
-			<div className="my-4">
-				<>
-					<p className="subtitle">Customer Reason</p>
-					<h5>
-						{plateData.customer_meaning
-							? plateData.customer_meaning
-							: "No Customer Reason"}
-					</h5>
-				</>
-				{(config.SHOW_DMV_COMMENTS || isCorrect !== null) && (
+		<div className="mt-10 max-w-lg mx-auto mb-4">
+			<button onClick={() => setGameMode(null)}>Change Game Mode</button>
+			<div className="text-center rounded-lg border-2 border-gray-400 border-solid mb-2 p-4 max-w-md mx-auto">
+				{isCorrect !== null && (
 					<>
-						<p className="subtitle">DMV Comments</p>
+						<h1 className={`mb-2 bg-${isCorrect === true ? "green" : "red"}-700 rounded-md p-2 pb-1 text-white`}>
+							{isCorrect ? "Correct!" : "Wrong!"}
+						</h1>
+
+						<p className="text-gray-600">
+							The DMV decided to{" "}
+							{plateData.status === "Y" ? "accept" : "deny"}
+						</p>
+					</>
+				)}
+				<h1>{parsePlate(plateData.plate)}</h1>
+				{isCorrect !== null &&
+					plateData.status === "N" &&
+					getReason(plateData.review_reason_code) !== null && (
+						<p className="text-gray-600">
+							because {getReason(plateData.review_reason_code)}
+						</p>
+					)}
+
+				<div className="my-4">
+					<>
+						<p className="subtitle">Customer Reason</p>
 						<h5>
-							{plateData.reviewer_comments
-								? plateData.reviewer_comments
-								: "No DMV Reason"}
+							{plateData.customer_meaning
+								? plateData.customer_meaning
+								: "No Customer Reason"}
 						</h5>
 					</>
-				)}
-			</div>
+					{(config.SHOW_DMV_COMMENTS || isCorrect !== null) && (
+						<>
+							<p className="subtitle">DMV Comments</p>
+							<h5>
+								{plateData.reviewer_comments
+									? plateData.reviewer_comments
+									: "No DMV Reason"}
+							</h5>
+						</>
+					)}
+				</div>
 
-			<div className="flex flex-row flex-grow-0">
-				{isCorrect === null ? (
-					<>
-						<Button color="green" callback={() => makeChoice("Y")}>
-							✓
+				<div className="flex flex-row flex-grow-0">
+					{isCorrect === null ? (
+						<>
+							<Button
+								color="green"
+								callback={() => makeChoice("Y")}
+							>
+								✓
+							</Button>
+							<Button
+								color="red"
+								callback={() => makeChoice("N")}
+							>
+								✖
+							</Button>
+						</>
+					) : (
+						<Button
+							color="blue"
+							callback={() => {
+								setPlateData(getRandomPlateData());
+								setIsCorrect(null);
+							}}
+						>
+							Next →
 						</Button>
-						<Button color="red" callback={() => makeChoice("N")}>
-							✖
-						</Button>
-					</>
-				) : (
-					<Button
-						color="blue"
-						callback={() => {
-							setPlateData(getRandomPlateData());
-							setIsCorrect(null);
-						}}
-					>
-						Next →
-					</Button>
-				)}
+					)}
+				</div>
+			</div>
+			<div className="max-w-md rounded-full bg-blue-400 mx-auto p-4">
+				<h1 className="text-white">{score}</h1>
 			</div>
 		</div>
 	);
 }
 
 function parsePlate(plate) {
-	return plate.replaceAll("#", "🖑").replaceAll("$", "🖤").replaceAll("&", "★");
+	return plate
+		.replaceAll("#", "🖑")
+		.replaceAll("$", "🖤")
+		.replaceAll("&", "★");
 }
 
 function Button({ children, color, callback }) {
