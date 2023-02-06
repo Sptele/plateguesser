@@ -4,7 +4,7 @@ function Footer() {
 	const [showCredits, setShowCredits] = useState(false);
 
 	return (
-		<footer className="fixed bottom-0 left-[50%] mx-auto translate-x-[-50%] translate-y-[-50%]">
+		<footer className="fixed bottom-0 left-[50%] mx-auto translate-x-[-50%] translate-y-[-50%] bg-white">
 			<small className="subtitle inline">
 				&copy; Copyright {new Date().getFullYear()}, Gautam Khajuria
 			</small>

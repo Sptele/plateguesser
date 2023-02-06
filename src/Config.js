@@ -3,6 +3,7 @@ function Config({ config, setConfig }) {
 		<div className="flex flex-row flex-grow-0 max-w-md mx-auto">
 			<div className="flex flex-col flex-grow-0 mx-auto">
 				{Object.entries(config).map(([k, v]) => {
+					if (k.startsWith("HIDDEN")) return null;
 					let input = <></>;
 
 					if (typeof v === "boolean") {

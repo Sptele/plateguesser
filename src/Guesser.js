@@ -8,21 +8,36 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 	const makeChoice = (choice) => {
 		setIsCorrect(choice === plateData.status);
 
-		if (choice === plateData.status) { setScore(score + 1); }
-		else {
+		if (choice === plateData.status) {
+			setScore(score + 1);
+		} else {
+			if (gameMode === "timed") return;
 			setScore(0);
 		}
-
 	};
 
 	return (
 		<div className="mt-10 max-w-lg mx-auto mb-4">
-			<button onClick={() => setGameMode(null)}>Change Game Mode</button>
+			<button
+				onClick={() => {
+					setGameMode(null);
+					setScore(0);
+				}}
+			>
+				Change Game Mode (Resets Score)
+			</button>
 			<div className="text-center rounded-lg border-2 border-gray-400 border-solid mb-2 p-4 max-w-md mx-auto">
 				{isCorrect !== null && (
 					<>
-						<h1 className={`mb-2 bg-${isCorrect === true ? "green" : "red"}-700 rounded-md p-2 pb-1 text-white`}>
-							{isCorrect ? "Correct!" : "Wrong!"}
+						<h1
+							className={`mb-2 bg-${
+								isCorrect === true ? "green" : "red"
+							}-700 rounded-md p-2 pb-1 text-white`}
+						>
+							{isCorrect
+								? "Correct!"
+								: "Wrong!" +
+								  (gameMode === "timed" ? "" : " You Lose!")}
 						</h1>
 
 						<p className="text-gray-600">
@@ -85,14 +100,18 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 								setIsCorrect(null);
 							}}
 						>
-							Next →
+							{isCorrect === true || gameMode === "timed"
+								? "Next →"
+								: "Retry ⟳"}
 						</Button>
 					)}
 				</div>
 			</div>
-			<div className="max-w-md rounded-full bg-blue-400 mx-auto p-4">
-				<h1 className="text-white">{score}</h1>
-			</div>
+			{config.SHOW_SCORE && (
+				<div className="max-w-md rounded-full bg-blue-400 mx-auto p-4">
+					<h1 className="text-white">{score}</h1>
+				</div>
+			)}
 		</div>
 	);
 }
