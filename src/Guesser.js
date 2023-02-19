@@ -11,18 +11,18 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 		if (choice === plateData.status) {
 			setScore(score + 1);
 		} else {
-			if (gameMode === "timed") return;
 			setScore(0);
 		}
 	};
 
 	return (
-		<div className="mt-10 max-w-lg mx-auto mb-4">
+		<div className="mt-5 max-w-lg mx-auto mb-4">
 			<button
 				onClick={() => {
 					setGameMode(null);
 					setScore(0);
 				}}
+				className="rounded-md bg-black text-white p-2 m-1"
 			>
 				Change Game Mode (Resets Score)
 			</button>
@@ -37,7 +37,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 							{isCorrect
 								? "Correct!"
 								: "Wrong!" +
-								  (gameMode === "timed" ? "" : " You Lose!")}
+								  (gameMode === "timed" ? "" : " Rank: ")}
 						</h1>
 
 						<p className="text-gray-600">
@@ -100,7 +100,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 								setIsCorrect(null);
 							}}
 						>
-							{isCorrect === true || gameMode === "timed"
+							{isCorrect === true || gameMode === "ranked"
 								? "Next →"
 								: "Retry ⟳"}
 						</Button>

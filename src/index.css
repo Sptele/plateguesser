@@ -42,6 +42,24 @@
 		@apply hover:text-blue-700;
 		@apply underline;
 	}
+
+	th, td {
+		@apply p-1;
+		@apply px-2;
+		@apply border-2;
+		@apply border-gray-300;
+		@apply border-solid;
+	}
+
+	
+	tbody tr:nth-child(even) {
+		@apply bg-gray-200;
+	}
+
+	tbody tr:hover {
+		@apply bg-gray-300;
+	}
+
 }
 
 @layer utilities {
