@@ -14,6 +14,8 @@ const leaderboard = [
 	{ name: "Gautam Gupta", score: 100 },
 	{ name: "John Doe", score: 50 },
 	{ name: "Jane Doe", score: 25 },
+	{ name: "John Smith", score: 10 },
+	{ name: "Jane Smith", score: 5 },
 ];
 
 app.get("/api/", (req, res) => {
