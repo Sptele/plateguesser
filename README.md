@@ -17,4 +17,12 @@ I saw a CSV file of a bunch of license plate applications (see below), and thoug
 
 ## How to Play
 
-This is a self-contained app, but requires ![Node.js](https://nodejs.org/en/) and ![NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). To start, clone the repository. Then, open the repository's directory on your computer and type `npm install`. After everything is done installing
+This is a self-contained app, but requires ![Node.js](https://nodejs.org/en/) and ![NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). To start, clone the repository. Then, open the repository's directory on your computer and type `npm install`. After everything is done installing, you need to create the `.env` (with that name) in the `plateguesser` directory. In it, paste this (and make sure to fill out the \<anything here> string):
+
+```md
+REACT_APP_SERVER_ROUTE="http://localhost:3001"
+REACT_APP_SERVER_TOKEN="<anything here>"
+```
+
+(The SERVER_ROUTE is by default localhost:3001 since the game runs on localhost:3000)
+After this, run the command `npm run play` to start the server AND the game. Note that this runs the development version. To play the build, you need to run `npm run build` to create a bundle and then start the server separately by running `npm run server`. Have fun!
