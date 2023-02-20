@@ -25,4 +25,5 @@ REACT_APP_SERVER_TOKEN="<anything here>"
 ```
 
 (The SERVER_ROUTE is by default localhost:3001 since the game runs on localhost:3000)
+
 After this, run the command `npm run play` to start the server AND the game. Note that this runs the development version. To play the build, you need to run `npm run build` to create a bundle and then start the server separately by running `npm run server`. Have fun!
