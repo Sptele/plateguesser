@@ -17,4 +17,4 @@ I saw a CSV file of a bunch of license plate applications (see below), and thoug
 
 ## How to Play
 
-This is hosted on the GitHub page for this repository. To get there, simply ...
+This is a self-contained app, but requires ![Node.js](https://nodejs.org/en/) and ![NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). To start, clone the repository. Then, open the repository's directory on your computer and type `npm install`. After everything is done installing
