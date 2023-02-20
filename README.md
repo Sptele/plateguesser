@@ -12,12 +12,12 @@ I saw a CSV file of a bunch of license plate applications (see below), and thoug
 
 ## Credits
 
-- ![CSV File - Veltman's Github](https://github.com/veltman/ca-license-plates)
-- ![Button Design - helped to pull the theme together - Flowbite.com](https://flowbite.com/docs/components/buttons/)
+- [CSV File - Veltman's Github](https://github.com/veltman/ca-license-plates)
+- [Button Design - helped to pull the theme together - Flowbite.com](https://flowbite.com/docs/components/buttons/)
 
 ## How to Play
 
-This is a self-contained app, but requires ![Node.js](https://nodejs.org/en/) and ![NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). To start, clone the repository. Then, open the repository's directory on your computer and type `npm install`. After everything is done installing, you need to create the `.env` (with that name) in the `plateguesser` directory. In it, paste this (and make sure to fill out the \<anything here> string):
+This is a self-contained app, but requires [Node.js](https://nodejs.org/en/) and [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). To start, clone the repository. Then, open the repository's directory on your computer and type `npm install`. After everything is done installing, you need to create the `.env` (with that name) in the `plateguesser` directory. In it, paste this (and make sure to fill out the \<anything here> string):
 
 ```md
 REACT_APP_SERVER_ROUTE="http://localhost:3001"
