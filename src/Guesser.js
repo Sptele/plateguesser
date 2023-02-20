@@ -1,24 +1,53 @@
 import data from "./data/applications.json";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function Guesser({ config, score, setScore, gameMode, setGameMode }) {
+function Guesser({ config, score, setScore, gameMode, setGameMode, name }) {
 	const [plateData, setPlateData] = useState(getRandomPlateData());
 	const [isCorrect, setIsCorrect] = useState(null);
+	const [isGameOver, setIsGameOver] = useState(false);
 
+	/**
+	 * Sets the isCorrent variable to whether or not the use was correct in their guess. This also edits the score or ends the game.
+	 * @param {String} choice "Y" or "N" - what the user chose
+	 */
 	const makeChoice = (choice) => {
 		setIsCorrect(choice === plateData.status);
 
 		if (choice === plateData.status) {
 			setScore(score + 1);
+			setIsGameOver(false);
 		} else {
-			setScore(0);
+			setIsGameOver(true);
 		}
 	};
+
+	useEffect(() => {
+		// Make sure we don't add 0's and also if the game is not over
+		if (isGameOver === false || score === 0) return;
+
+		// Add to the leaderboard in ranked mode
+		if (gameMode === "ranked") {
+			fetch(process.env.REACT_APP_SERVER_ROUTE + "/api/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization:
+						"Bearer " + process.env.REACT_APP_SERVER_TOKEN,
+				},
+				body: JSON.stringify({ name, score }),
+			});
+		}
+
+		// Both modes: reset the game
+		setIsGameOver(false);
+		setScore(0);
+	}, [isGameOver]); // Change on game state change
 
 	return (
 		<div className="mt-5 max-w-lg mx-auto mb-4">
 			<button
 				onClick={() => {
+					// Go back to the main menu state
 					setGameMode(null);
 					setScore(0);
 				}}
@@ -26,6 +55,8 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 			>
 				Change Game Mode (Resets Score)
 			</button>
+
+			{/* Status indicator */}
 			<div className="text-center rounded-lg border-2 border-gray-400 border-solid mb-2 p-4 max-w-md mx-auto">
 				{isCorrect !== null && (
 					<>
@@ -34,10 +65,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 								isCorrect === true ? "green" : "red"
 							}-700 rounded-md p-2 pb-1 text-white`}
 						>
-							{isCorrect
-								? "Correct!"
-								: "Wrong!" +
-								  (gameMode === "timed" ? "" : " Rank: ")}
+							{isCorrect ? "Correct!" : "Wrong!"}
 						</h1>
 
 						<p className="text-gray-600">
@@ -46,7 +74,14 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 						</p>
 					</>
 				)}
-				<h1>{parsePlate(plateData.plate)}</h1>
+
+				{/* Plate */}
+				<div className="p-3 rounded-md border-2 border-black">
+					<h1>{parsePlate(plateData.plate)}</h1>
+					<p className="subtitle">I'm a license plate :O</p>
+				</div>
+
+				{/* Formal Reasoning */}
 				{isCorrect !== null &&
 					plateData.status === "N" &&
 					getReason(plateData.review_reason_code) !== null && (
@@ -56,6 +91,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 					)}
 
 				<div className="my-4">
+					{/* Customer/DMV Thoughts */}
 					<>
 						<p className="subtitle">Customer Reason</p>
 						<h5>
@@ -77,6 +113,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 				</div>
 
 				<div className="flex flex-row flex-grow-0">
+					{/* Choosers or Next/Retry Button*/}
 					{isCorrect === null ? (
 						<>
 							<Button
@@ -107,6 +144,7 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 					)}
 				</div>
 			</div>
+			{/* Score */}
 			{config.SHOW_SCORE && (
 				<div className="max-w-md rounded-full bg-blue-400 mx-auto p-4">
 					<h1 className="text-white">{score}</h1>
@@ -116,6 +154,11 @@ function Guesser({ config, score, setScore, gameMode, setGameMode }) {
 	);
 }
 
+/**
+ * Following Californian DMV conventions, replaces placeholder letters with their intended icons.
+ * @param {String} plate The raw plate string
+ * @returns parsed plate by UNICODE characters
+ */
 function parsePlate(plate) {
 	return plate
 		.replaceAll("#", "🖑")
@@ -123,6 +166,10 @@ function parsePlate(plate) {
 		.replaceAll("&", "★");
 }
 
+/**
+ * Following Frostbite's button designs, based on the color passed in, returns a button with the appropriate styling.
+ * @returns JSX button
+ */
 function Button({ children, color, callback }) {
 	let className = "grow ";
 	switch (color) {
@@ -155,6 +202,11 @@ function getRandomPlateData() {
 	return data[randomIndex];
 }
 
+/**
+ * Returns the formal reason based on the number. These have been formatted for how they are shown in-game.
+ * @param {Number} status the number AS A STRING
+ * @returns
+ */
 function getReason(status) {
 	// 1. The configuration has a sexual connotation or is a term of lust or depravity.
 	// 2. The configuration is a vulgar term; a term of contempt, prejudice, or hostility; an insulting or degrading term; a racially degrading term; or an ethnically degrading term.

@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 
-function Leaderboard() {
+function Leaderboard({ score }) {
+	// Leaderborard and the amount of entries to show
 	const [leaderboard, setLeaderboard] = useState([]);
 	const [currentShow, setCurrentShow] = useState(5);
 
 	useEffect(() => {
+		// Get the leaderboard whenever the score changes
 		fetch(process.env.REACT_APP_SERVER_ROUTE + "/api/")
 			.then((response) => response.json())
 			.then((state) => {
 				setLeaderboard(state);
 			});
-	}, []);
+	}, [score]);
 
 	return (
 		<div className="max-w-lg mx-auto mt-4">
@@ -24,8 +26,15 @@ function Leaderboard() {
 					</tr>
 				</thead>
 				<tbody>
-					{leaderboard.map((entry, index) => {
-						if (index >= currentShow) {
+					{/* Only show top 50 */}
+					{leaderboard.subarray(0, 50).map((entry, index) => {
+						// Only show amount of entries desired to be seen right now
+						// Don't show null entries
+						if (
+							index >= currentShow ||
+							entry.name === undefined ||
+							entry.score === undefined
+						) {
 							return null;
 						}
 
@@ -37,9 +46,14 @@ function Leaderboard() {
 							</tr>
 						);
 					})}
+					{/* Control how much of the leaderboard is shown */}
 					<tr key={"buttons-table"}>
 						<td colSpan={"3"} className="text-center">
-							{currentShow <= leaderboard.length ? (
+							{leaderboard.length === 0 ? (
+								<p>No Scores yet! Become the first one!</p>
+							) : null}
+							{leaderboard.length > 0 &&
+							currentShow <= leaderboard.length ? (
 								<button
 									className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded inline mx-1"
 									onClick={() =>
@@ -50,7 +64,7 @@ function Leaderboard() {
 									{currentShow === 0 ? "Leaderboard" : "More"}
 								</button>
 							) : null}
-							{currentShow !== 0 ? (
+							{leaderboard.length > 0 && currentShow !== 0 ? (
 								<button
 									className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-1 px-4 rounded inline mx-1"
 									onClick={() =>

@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&display=swap');
 
 @layer base {
+	/* Header Stylings */
 	h1 {
 		@apply text-4xl;
 	}
@@ -28,21 +29,25 @@
 		@apply text-base;
 	}
 
+	/* Font (from google) */
 	html {
 		font-family: 'Josefin Sans', sans-serif;
 	}
 
+	/* List styling */
 	li {
 		@apply list-disc;
 		@apply list-inside;
 	}
 
+	/* Text button styling */
 	a:hover, .text-button:hover, .clicked {
 		@apply text-blue-500;
 		@apply hover:text-blue-700;
 		@apply underline;
 	}
 
+	/* Table styling */
 	th, td {
 		@apply p-1;
 		@apply px-2;
@@ -51,7 +56,7 @@
 		@apply border-solid;
 	}
 
-	
+	/* Table row styling */
 	tbody tr:nth-child(even) {
 		@apply bg-gray-200;
 	}
@@ -63,6 +68,7 @@
 }
 
 @layer utilities {
+	/* Subtitle styling: Smaller, lighter, and gray */
 	.subtitle {
 		@apply text-sm;
 		@apply font-light;
